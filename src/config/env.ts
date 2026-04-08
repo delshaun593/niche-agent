@@ -21,3 +21,12 @@ export const config = {
     redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:8080/api/google/callback',
   }
 };
+
+// Validation logging for Render debugging
+console.log('[Config] Environment variables loaded:');
+console.log('- Port:', config.port);
+console.log('- Supabase URL:', config.supabase.url ? 'SET' : 'MISSING');
+console.log('- Supabase Key:', config.supabase.serviceRoleKey || config.supabase.anonKey ? 'SET' : 'MISSING');
+console.log('- Google Client ID:', config.google.clientId ? 'SET' : 'MISSING');
+console.log('- Resend API Key:', config.resend.apiKey ? 'SET' : 'MISSING');
+console.log('- VAPI Secret:', config.vapi.secret ? 'SET' : 'MISSING');

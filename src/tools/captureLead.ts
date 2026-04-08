@@ -1,17 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 import { config } from '../config/env.js';
 
-const supabaseUrl = config.supabase.url;
-const supabaseKey = config.supabase.serviceRoleKey || config.supabase.anonKey;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function captureLead(params: { name: string; phone: string; email?: string; niche?: string; notes?: string }, userId?: string) {
   console.log(`[Tool: captureLead] Executing with params:`, params);
   
-  if (!config.supabase.url) {
-    console.warn("Supabase URL not configured, skipping DB insert.");
-    return { status: "success", message: "Mock lead captured." };
+  if (!config.supabase.url || !config.supabase.anonKey) {
+    console.warn("Supabase URL or Key not configured, skipping DB insert.");
+    return { status: "success", message: "Mock lead captured (Config missing)." };
   }
+
+  const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey || config.supabase.anonKey);
 
   const { data, error } = await supabase
     .from('leads')

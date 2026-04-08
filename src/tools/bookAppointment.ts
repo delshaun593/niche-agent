@@ -3,10 +3,6 @@ import { config } from '../config/env.js';
 import { sendConfirmation } from './sendConfirmation.js';
 import { google } from 'googleapis';
 
-const supabaseUrl = config.supabase.url;
-const supabaseKey = config.supabase.serviceRoleKey || config.supabase.anonKey;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 // Shared OAuth2 Client logic
 const getOAuth2Client = (refreshToken: string) => {
   const oauth2Client = new google.auth.OAuth2(
@@ -21,26 +17,30 @@ const getOAuth2Client = (refreshToken: string) => {
 export async function bookAppointment(params: { name: string; email: string; appointmentTime: string; service?: string; phone?: string }, userId?: string) {
   console.log(`[Tool: bookAppointment] Executing with params:`, params);
 
-  // 1. Save appointment to database
-  if (config.supabase.url) {
-    const { error } = await supabase
-      .from('appointments')
-      .insert([{
-        user_id: userId,
-        name: params.name,
-        email: params.email,
-        phone: params.phone,
-        service: params.service,
-        appointment_time: params.appointmentTime,
-        created_at: new Date().toISOString()
-      }]);
+  // Lazy initialize Supabase to prevent startup crashes if config is missing
+  if (!config.supabase.url || !config.supabase.anonKey) {
+    console.warn("Supabase configuration missing. Appointment will not be saved to DB.");
+    return { status: "success", message: "Mock appointment booked (Database bypass)." };
+  }
+  
+  const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey || config.supabase.anonKey);
 
-    if (error) {
-      console.error("Error saving appointment:", error);
-      throw new Error(`Failed to save appointment: ${error.message}`);
-    }
-  } else {
-    console.warn("Supabase URL not configured, skipping DB insert for appointment.");
+  // 1. Save appointment to database
+  const { error } = await supabase
+    .from('appointments')
+    .insert([{
+      user_id: userId,
+      name: params.name,
+      email: params.email,
+      phone: params.phone,
+      service: params.service,
+      appointment_time: params.appointmentTime,
+      created_at: new Date().toISOString()
+    }]);
+
+  if (error) {
+    console.error("Error saving appointment:", error);
+    throw new Error(`Failed to save appointment: ${error.message}`);
   }
 
   // 2. Trigger the confirmation email
