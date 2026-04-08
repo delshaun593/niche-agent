@@ -3,19 +3,23 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/server.ts"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_OPTIONS='--loader ts-node/esm --no-warnings' node src/server.ts",
+    "build": "cd dashboard && npm install && npm run build && cd .. && tsc",
+    "start": "NODE_ENV=production node dist/server.js"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "googleapis": "^171.4.0",
+    "next": "^16.2.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "resend": "^6.10.0",
     "twilio": "^5.13.1",
     "ws": "^8.20.0"

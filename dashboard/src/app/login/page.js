@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = LoginPage;
+const jsx_runtime_1 = require("react/jsx-runtime");
+const actions_1 = require("./actions");
+async function LoginPage({ searchParams }) {
+    const { message } = await searchParams;
+    return ((0, jsx_runtime_1.jsx)("div", { className: "flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mt-20 mx-auto", children: (0, jsx_runtime_1.jsxs)("form", { className: "flex-1 flex flex-col w-full justify-center gap-2 text-foreground", children: [(0, jsx_runtime_1.jsx)("h1", { className: "text-2xl font-semibold mb-4 text-center", children: "Sign In to Niche Agent" }), (0, jsx_runtime_1.jsx)("label", { className: "text-md", htmlFor: "email", children: "Email" }), (0, jsx_runtime_1.jsx)("input", { className: "rounded-md px-4 py-2 bg-inherit border mb-6 text-foreground", name: "email", placeholder: "you@example.com", required: true }), (0, jsx_runtime_1.jsx)("label", { className: "text-md", htmlFor: "password", children: "Password" }), (0, jsx_runtime_1.jsx)("input", { className: "rounded-md px-4 py-2 bg-inherit border mb-6 text-foreground", type: "password", name: "password", placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", required: true }), (0, jsx_runtime_1.jsx)("button", { formAction: actions_1.login, className: "bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 mb-2 transition-colors", children: "Sign In" }), (0, jsx_runtime_1.jsx)("button", { formAction: actions_1.signup, className: "border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md px-4 py-2 mb-2 transition-colors", children: "Sign Up" }), message && ((0, jsx_runtime_1.jsx)("p", { className: "mt-4 p-4 bg-foreground/10 text-foreground text-center", children: message }))] }) }));
+}
+//# sourceMappingURL=page.js.map

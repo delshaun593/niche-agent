@@ -1,7 +1,8 @@
-import { Router, Request, Response } from 'express';
-import { captureLead } from '../tools/captureLead';
-import { bookAppointment } from '../tools/bookAppointment';
-import { config } from '../config/env';
+import { Router } from 'express';
+import type { Request, Response } from 'express';
+import { captureLead } from '../tools/captureLead.js';
+import { bookAppointment } from '../tools/bookAppointment.js';
+import { config } from '../config/env.js';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = config.supabase.url;

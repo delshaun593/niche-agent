@@ -1,24 +1,37 @@
 import express from 'express';
-import { config } from './config/env';
-import vapiRoutes from './routes/vapi';
-import googleRoutes from './routes/google';
+// @ts-ignore
+import next from 'next';
+import { config } from './config/env.js';
+import vapiRoutes from './routes/vapi.js';
+import googleRoutes from './routes/google.js';
 
-const app = express();
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev, dir: './dashboard' });
+const handle = nextApp.getRequestHandler();
 
-// Use express.json() to parse JSON bodies automatically
-app.use(express.json());
+nextApp.prepare().then(() => {
+  const app = express();
 
-// Register API Routes
-app.use('/api', vapiRoutes);
-app.use('/api/google', googleRoutes);
+  // Use express.json() to parse JSON bodies automatically
+  app.use(express.json());
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'AI Phone Agent Backend is running.' });
-});
+  // Register API Routes
+  app.use('/api', vapiRoutes);
+  app.use('/api/google', googleRoutes);
 
-// Start the server
-app.listen(config.port, () => {
-  console.log(`Server is running on port ${config.port}`);
-  console.log(`Vapi Webhook URL: http://localhost:${config.port}/api/vapi-webhook`);
+  // Health check endpoint
+  app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'AI Phone Agent Backend is running.' });
+  });
+
+  // Handle all other requests with Next.js
+  app.all('*', (req, res) => {
+    return handle(req, res);
+  });
+
+  // Start the server
+  app.listen(config.port, () => {
+    console.log(`> Hybrid Server ready on http://localhost:${config.port}`);
+    console.log(`> Vapi Webhook URL: http://localhost:${config.port}/api/vapi-webhook`);
+  });
 });

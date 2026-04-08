@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { google } from 'googleapis';
 import { createClient } from '@supabase/supabase-js';
-import { config } from '../config/env';
+import { config } from '../config/env.js';
 
 const router = Router();
 

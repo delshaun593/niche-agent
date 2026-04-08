@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import { config } from '../config/env';
-import { sendConfirmation } from './sendConfirmation';
+import { config } from '../config/env.js';
+import { sendConfirmation } from './sendConfirmation.js';
 import { google } from 'googleapis';
 
 const supabaseUrl = config.supabase.url;
@@ -49,7 +49,7 @@ export async function bookAppointment(params: { name: string; email: string; app
       name: params.name,
       email: params.email,
       appointmentTime: params.appointmentTime,
-      service: params.service
+      service: params.service || undefined
     });
   } catch (err: any) {
     console.error("Failed to send confirmation email, but appointment was booked.", err);
