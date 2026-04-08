@@ -5,9 +5,6 @@ import { config } from '../config/env.js';
 
 const router = Router();
 
-// Configure the Supabase Client
-const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey || config.supabase.anonKey);
-
 // OAuth2 Client initialization helper
 const getOAuth2Client = () => {
   return new google.auth.OAuth2(
@@ -47,6 +44,11 @@ router.get('/callback', async (req, res) => {
     return res.status(400).send("Missing code or state parameter.");
   }
 
+  // Lazy initialize Supabase to prevent startup crashes if config is missing
+  const supabase = (config.supabase.url && config.supabase.anonKey) 
+    ? createClient(config.supabase.url, config.supabase.serviceRoleKey || config.supabase.anonKey)
+    : null;
+
   const oauth2Client = getOAuth2Client();
 
   try {
@@ -54,7 +56,7 @@ router.get('/callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     
     // We strictly need the refresh token to book appointments when the user is offline
-    if (tokens.refresh_token) {
+    if (tokens.refresh_token && supabase) {
       // Save to Supabase
       const { error } = await supabase
         .from('agents')
@@ -75,6 +77,8 @@ router.get('/callback', async (req, res) => {
           </body>
         </html>
       `);
+    } else if (!supabase) {
+      return res.status(500).send("Supabase configuration missing on server.");
     } else {
       // If we didn't receive a refresh token (maybe they authorized previously)
       return res.send("Authorization received, but no refresh token was provided. You may need to revoke access in your Google Account and try again.");

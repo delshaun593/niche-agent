@@ -5,15 +5,16 @@ import { bookAppointment } from '../tools/bookAppointment.js';
 import { config } from '../config/env.js';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = config.supabase.url;
-const supabaseKey = config.supabase.serviceRoleKey || config.supabase.anonKey;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const router = Router();
 
 router.post('/vapi-webhook', async (req: Request, res: Response): Promise<void> => {
   try {
     const payload = req.body;
+    
+    // Lazy initialize Supabase to prevent startup crashes if config is missing
+    const supabase = (config.supabase.url && config.supabase.anonKey) 
+      ? createClient(config.supabase.url, config.supabase.serviceRoleKey || config.supabase.anonKey)
+      : null;
     
     // Optional Vapi signature verification (not fully implemented here, placeholder)
     const vapiSecret = req.headers['x-vapi-secret'];
@@ -28,7 +29,7 @@ router.post('/vapi-webhook', async (req: Request, res: Response): Promise<void> 
     const assistantId = message?.call?.assistantId || null;
     let userId: string | undefined = undefined;
 
-    if (assistantId && config.supabase.url) {
+    if (assistantId && supabase) {
       // Lookup which user owns this assistant
       const { data: agentData } = await supabase
         .from('agents')
