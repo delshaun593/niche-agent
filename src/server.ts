@@ -6,7 +6,8 @@ import vapiRoutes from './routes/vapi.js';
 import googleRoutes from './routes/google.js';
 
 const dev = process.env.NODE_ENV !== 'production';
-const nextApp = next({ dev, dir: './dashboard' });
+// @ts-ignore
+const nextApp = ((next as any).default || next)({ dev, dir: './dashboard' });
 const handle = nextApp.getRequestHandler();
 
 nextApp.prepare().then(() => {

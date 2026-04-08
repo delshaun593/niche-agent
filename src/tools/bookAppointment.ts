@@ -49,8 +49,9 @@ export async function bookAppointment(params: { name: string; email: string; app
       name: params.name,
       email: params.email,
       appointmentTime: params.appointmentTime,
-      service: params.service || undefined
+      ...(params.service ? { service: params.service } : {}),
     });
+    console.log(`[Tool: bookAppointment] Email confirmation sent.`);
   } catch (err: any) {
     console.error("Failed to send confirmation email, but appointment was booked.", err);
   }
