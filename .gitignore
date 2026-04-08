@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# environments
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# build outputs
+dist/
+dashboard/.next/
+dashboard/out/
+*.tsbuildinfo
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and OS files
+.vscode/
+.idea/
+.DS_Store
