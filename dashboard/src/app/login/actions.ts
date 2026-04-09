@@ -5,35 +5,39 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 
 export async function login(formData: FormData) {
+  console.log('Login action started');
   const supabase = await createClient()
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  console.log('Attempting login for:', email);
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    redirect('/login?message=Could not authenticate user')
+    console.error('Login error:', error.message);
+    return redirect('/login?message=' + encodeURIComponent(error.message))
   }
 
+  console.log('Login successful, redirecting to /home');
   revalidatePath('/', 'layout')
   redirect('/home')
 }
 
 export async function signup(formData: FormData) {
+  console.log('Signup action started');
   const supabase = await createClient()
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-
-  const { error } = await supabase.auth.signUp(data)
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  
+  console.log('Attempting signup for:', email);
+  const { data, error } = await supabase.auth.signUp({ email, password })
 
   if (error) {
-    redirect('/login?message=Could not authenticate user')
+    console.error('Signup error:', error.message);
+    return redirect('/login?message=' + encodeURIComponent(error.message))
   }
 
+  console.log('Signup successful, redirecting to /home');
   revalidatePath('/', 'layout')
   redirect('/home')
 }
