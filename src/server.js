@@ -18,7 +18,7 @@ nextApp.prepare().then(() => {
         res.status(200).json({ status: 'ok', message: 'AI Phone Agent Backend is running.' });
     });
     // Handle all other requests with Next.js
-    app.all('/*splat', (req, res) => {
+    app.all('*splat', (req, res) => {
         return handle(req, res);
     });
     // Start the server
