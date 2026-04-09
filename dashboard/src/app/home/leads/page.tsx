@@ -17,39 +17,42 @@ export default async function LeadsPage() {
   ];
 
   return (
-    <div className="p-10 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-gray-900">Captured Leads</h2>
-      <p className="text-gray-600 mb-8">View and manage all leads captured by your AI receptionist.</p>
+    <div className="p-8 md:p-12 max-w-6xl mx-auto flex flex-col gap-10">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-4xl font-extrabold text-foreground tracking-tight">Captured Leads</h2>
+        <p className="text-foreground/60 text-lg uppercase tracking-wider font-semibold">Leads from your AI Receptionist</p>
+      </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="nm-flat rounded-[2.5rem] overflow-hidden border-none p-4">
+        <table className="min-w-full">
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th className="px-8 py-6 text-left text-xs font-bold text-foreground/40 uppercase tracking-[0.2em]">Name</th>
+              <th className="px-8 py-6 text-left text-xs font-bold text-foreground/40 uppercase tracking-[0.2em]">Phone</th>
+              <th className="px-8 py-6 text-left text-xs font-bold text-foreground/40 uppercase tracking-[0.2em]">Status</th>
+              <th className="px-8 py-6 text-left text-xs font-bold text-foreground/40 uppercase tracking-[0.2em]">Date</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="text-foreground/80">
             {leads.map((lead) => (
-              <tr key={lead.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{lead.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{lead.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    lead.status === 'Interested' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+              <tr key={lead.id} className="hover:nm-inset transition-all duration-300">
+                <td className="px-8 py-6 whitespace-nowrap text-sm font-bold">{lead.name}</td>
+                <td className="px-8 py-6 whitespace-nowrap text-sm font-medium opacity-60 font-mono">{lead.phone}</td>
+                <td className="px-8 py-6 whitespace-nowrap text-sm">
+                  <span className={`px-4 py-1 inline-flex text-xs leading-5 font-black uppercase tracking-wider rounded-lg ${
+                    lead.status === 'Interested' ? 'nm-inset text-green-500' : 'nm-inset text-yellow-500'
                   }`}>
                     {lead.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{lead.date}</td>
+                <td className="px-8 py-6 whitespace-nowrap text-sm font-medium opacity-60">{lead.date}</td>
               </tr>
             ))}
             {leads.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-6 py-10 text-center text-gray-500">
-                  No leads captured yet. Your agent is waiting for calls!
+                <td colSpan={4} className="px-8 py-20 text-center font-bold text-foreground/20 text-xl tracking-tight">
+                  No leads captured yet.<br/>
+                  <span className="text-sm font-medium opacity-50">Your agent is waiting for calls...</span>
                 </td>
               </tr>
             )}

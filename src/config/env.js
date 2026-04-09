@@ -17,7 +17,7 @@ export const config = {
     google: {
         clientId: process.env.GOOGLE_CLIENT_ID || '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-        redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:8080/api/google/callback',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
     }
 };
 //# sourceMappingURL=env.js.map

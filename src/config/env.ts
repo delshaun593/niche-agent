@@ -15,11 +15,11 @@ export const config = {
   vapi: {
     secret: process.env.VAPI_SECRET || '', // To verify webhooks from Vapi
   },
-  google: {
-    clientId: process.env.GOOGLE_CLIENT_ID || '',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:8080/api/google/callback',
-  }
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      redirectUri: process.env.GOOGLE_REDIRECT_URI || '', // Strictly environment-driven for production
+    }
 };
 
 // Validation logging for Render debugging
@@ -28,5 +28,6 @@ console.log('- Port:', config.port);
 console.log('- Supabase URL:', config.supabase.url ? 'SET' : 'MISSING');
 console.log('- Supabase Key:', config.supabase.serviceRoleKey || config.supabase.anonKey ? 'SET' : 'MISSING');
 console.log('- Google Client ID:', config.google.clientId ? 'SET' : 'MISSING');
+console.log('- Google Redirect URI:', config.google.redirectUri || 'NOT SET (Calendar integration will fail)');
 console.log('- Resend API Key:', config.resend.apiKey ? 'SET' : 'MISSING');
 console.log('- VAPI Secret:', config.vapi.secret ? 'SET' : 'MISSING');
